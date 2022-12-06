@@ -4,10 +4,21 @@ class Stack {
         this.items = items;
     }
     push(item){
-        this.items.push(item);
+        if(Array.isArray(item)){
+            this.items = this.items.concat(item);
+        }
+        else
+            this.items.push(item);
     }
-    pop(){
-        return this.items.pop();
+    pop(num){
+        if(num==undefined){
+            return this.items.pop();
+        }
+        else {
+            var ret= this.items.slice(-num);
+            this.items = this.items.slice(0,this.items.length-num);
+            return ret;
+        }
     }
     peek(){
         return this.items[this.items.length - 1];
@@ -52,5 +63,20 @@ moves.forEach(move=>{
 });
 
 
+
 // console.log("--------------------");
-console.log(stackBoard.flatMap(s=>s.peek()).join(''));
+console.log("Question a: "+stackBoard.flatMap(s=>s.peek()).join(''));
+
+stackBoard = splitStacks[splitStacks.length-1].map((el,idx)=>{
+    const s = new Stack(el,[]);
+    splitStacks.slice(0,splitStacks.length-1).flatMap(c=>c[idx]).reverse().filter(e=>e!=' ').forEach(e=>s.push(e));
+    return s;
+});
+
+moves.forEach(move=>{
+    let [match,num,from,to] = move.match(moveRegex);
+
+    stackBoard[to-1].push(stackBoard[from-1].pop(num));
+    num--;
+});
+console.log("Question b: "+stackBoard.flatMap(s=>s.peek()).join(''));
