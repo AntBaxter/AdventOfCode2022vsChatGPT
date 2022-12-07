@@ -1,3 +1,6 @@
+
+
+
 const fs = require('fs');
 let input = fs.readFileSync('Day6/input.txt', 'utf8');
 for(let idx = 4; idx<input.length; idx++){
